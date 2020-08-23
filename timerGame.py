@@ -9,8 +9,12 @@ from operator import itemgetter
 
 selection = 0
 players = []
-globalHighScores = []
 currentScores = []
+globalHighScores = []
+
+if os.path.isfile('highscores.txt'):
+	with open('highscores.txt','rb') as f:
+		globalHighScores = pickle.load(f)
 
 def clear():
 	os.system('clear')
@@ -49,21 +53,20 @@ while True:
 		moveOn()
 
 	if selection == 1:
-
 		clear()
 		currentScores.clear()
 
 		if len(players) < 2:
 			print ('There must be at least 2 players')
-			sleep (2)
-			menu()
+			moveOn()
+			continue
 
 		else:
 			for x in range (len(players)):
 				clear()
 				print ("""
 
-		**********************{}************************
+		**********************{}**********************
 				""".format(players[x]))
 
 				sleep (randint(3, 13))
@@ -124,5 +127,15 @@ while True:
 
 	if selection == 5:
 		clear()
+		for x in range (len(globalHighScores)):
+			print ('{}	{}'.format(globalHighScores[x][0],globalHighScores[x][1]))
+		moveOn()
+
 	if selection == 6:
 		clear()
+		with open ('highscores.txt','wb') as f:
+			pickle.dump(globalHighScores,f)
+
+		print ('Thank you for playing!!!')
+		sleep(3)
+		break
