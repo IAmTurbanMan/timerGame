@@ -7,13 +7,16 @@ from time import sleep
 from random import randint
 from operator import itemgetter
 
-selection = ''
+selection = 0
 players = []
 globalHighScores = []
 currentScores = []
 
 def clear():
 	os.system('clear')
+
+def moveOn():
+	input ('Enter to continue')
 
 def menu():
 	print ("""
@@ -33,11 +36,23 @@ while True:
 
 	clear()
 	menu()
-
-	selection = input('Selection: ')
-
-	if selection == '1':
+	try:
+		selection = int(input('Selection: '))
+	except ValueError:
 		clear()
+		print ('Please enter a valid selection')
+		moveOn()
+
+	if selection > 6:
+		clear()
+		print ('Please enter a valid selection')
+		moveOn()
+
+	if selection == 1:
+
+		clear()
+		currentScores.clear()
+
 		if len(players) < 2:
 			print ('There must be at least 2 players')
 			sleep (2)
@@ -45,12 +60,13 @@ while True:
 
 		else:
 			for x in range (len(players)):
+				clear()
 				print ("""
 
 		**********************{}************************
 				""".format(players[x]))
 
-				sleep (randint(1, 10))
+				sleep (randint(3, 13))
 				startTime = datetime.datetime.now()
 
 				input("""
@@ -65,35 +81,48 @@ while True:
 				timeDiff = endTime - startTime
 				diffStr = str(timeDiff)
 
-				print (players[x] + ':' + diffStr)
+				print (players[x] + ' : ' + diffStr)
 				currentScores.append((players[x], diffStr))
 				globalHighScores.append((players[x], diffStr))
 
 				currentScores = sorted(currentScores, key=itemgetter(1), reverse=False)
 				globalHighScores = sorted(globalHighScores, key=itemgetter(1), reverse=False)[:10]
-				print (globalHighScores)
-				sleep(5)
-				clear()
+				#print (globalHighScores)
+				moveOn()
 
 		winnerName = currentScores[0][0]
 		winnerTime = currentScores[0][1]
 		print ('The winner of this round is {} with a time of {}'.format(winnerName,winnerTime))
-		sleep(5)
+		moveOn()
 
-	if selection == '2':
+	if selection == 2:
 		clear()
 		playerName = input('Player name: ')
 		players.append(playerName)
+		print ('{} is now playing'.format(playerName))
+		moveOn()
 
-	if selection == '3':
+	if selection == 3:
 		clear()
 		exitPlayer = input('Player to remove: ')
 		try:
 			players.remove(exitPlayer)
 		except:
 			print ('Player does not exist')
+			moveOn()
+			continue
 
-	if selection == '4':
+		print ('{} is no longer part of the game'.format(exitPlayer))
+		moveOn()
+
+	if selection == 4:
 		clear()
-	if selection == '5':
+		for x in range (len(currentScores)):
+			print ('{}	{}'.format(currentScores[x][0],currentScores[x][1]))
+
+		moveOn()
+
+	if selection == 5:
+		clear()
+	if selection == 6:
 		clear()
